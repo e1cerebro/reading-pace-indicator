@@ -1,0 +1,49 @@
+// This is a SCSS mixin for creating a media query based on a specified breakpoint. 
+@mixin media-breakpoint-up($breakpoint) {
+
+	// Check if the $breakpoint exists in the $grid-breakpoints map.
+	@if map-has-key($grid-breakpoints, $breakpoint) {
+	
+		// If the $breakpoint exists, obtain its value from the map.
+		$breakpoint-value: map-get($grid-breakpoints, $breakpoint);
+		
+		// Create a media query with the min-width property set to the value of $breakpoint.
+		@media (min-width: $breakpoint-value) {
+			
+			// The content passed to the mixin is included inside the media query using the @content directive.
+			@content;
+		}
+	}
+	
+	// If the $breakpoint does not exist in the map, create a media query with the min-width property set to $breakpoint.
+	@else {
+		@media (min-width: $breakpoint) {
+			@content;
+		}
+	}
+}
+
+// This is a SCSS mixin for creating a media query based on a specified breakpoint. 
+@mixin media-breakpoint-down($breakpoint) {
+
+	// Check if the $breakpoint exists in the $grid-breakpoints map.
+	@if map-has-key($grid-breakpoints, $breakpoint) {
+	
+		// If the $breakpoint exists, obtain its value from the map.
+		$breakpoint-value: map-get($grid-breakpoints, $breakpoint);
+		
+		// Create a media query with the max-width property set to the value of $breakpoint minus 1.
+		@media (max-width: ($breakpoint-value - 1)) {
+			
+			// The content passed to the mixin is included inside the media query using the @content directive.
+			@content;
+		}
+	} 
+	
+	// If the $breakpoint does not exist in the map, create a media query with the max-width property set to $breakpoint.
+	@else {
+		@media (max-width: $breakpoint) {
+			@content;
+		}
+	}
+}
