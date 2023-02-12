@@ -13,7 +13,7 @@ class Utils {
 		}
 		
 		$wordCount = $this->countWords($content);
-		$average_reading_speed = get_option('words_per_minute_option_name', AVERAGE_READING_SPEED);
+		$average_reading_speed = esc_attr(get_option('words_per_minute_option_name', AVERAGE_READING_SPEED));
 		$readTimeInMinutes = ceil($wordCount / $average_reading_speed);
 		return $this->convertMinsToHours($readTimeInMinutes);
 	}
@@ -60,5 +60,3 @@ class Utils {
 		return "{$formattedHours} {$hoursLabel} : {$formattedMinutes} {$minutesLabel}";
 	}
 }
-
-

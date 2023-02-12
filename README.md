@@ -6,6 +6,9 @@ The Reading Pace Indicator is a powerful and user-friendly Wordpress plugin that
 
 ## Features
 - Estimated reading time for a page
+- Tracks the time taken to read a certain amount of content.
+- Displays the reading pace in words per minute.
+- Lightweight and easy to use.
 
 ## Installation
 1. Log in to your Wordpress dashboard.
@@ -19,10 +22,15 @@ The Reading Pace Indicator is a powerful and user-friendly Wordpress plugin that
 This plugin shows the estimated time it will take to read a blog content
 
 ### How do I configure the plugin?
-Currently there are not configuration settings, just install and check the post single page
+When you login into the Wordpress admin page, click on the Reading Pace menu and you can configure the plugin from the settings options
 
 ### Is this plugin compatible with my Wordpress version?
-This plugin has been tested on Wordpress 6.1.1
+This plugin have been tested on Wordpress 6.1.1
 
-## Credits
-This plugin was developed by Christian Nwachukwu as a demo project for his interview at Evolving Web
+## Dependencies
+This project requires the following software to be installed on your system:
+
+- PHP >= 8.0
+- WordPress >= 6.1.1
+
+Please ensure that your system meets these requirements before setting up the project.

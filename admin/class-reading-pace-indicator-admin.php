@@ -145,6 +145,7 @@ class Reading_Pace_Indicator_Admin {
 			<p><?php _e('You can adjust the settings on this page.', 'reading-pace-indicator'); ?></p>
 			<form method='post' action='options.php'>
 				<?php
+					settings_errors();
 					settings_fields( 'reading_pace_indicator_option_group' );
 					do_settings_sections( 'reading_pace_indicator' );
 					submit_button();
