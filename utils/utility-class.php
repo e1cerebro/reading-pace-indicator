@@ -48,15 +48,10 @@ class Utils {
 	 *
 	 * @return string The formatted time in hours and minutes.
 	 */
-	public function convertMinsToHours(int $minutes): string
-	{
+	public function convertMinsToHours(int $minutes): string {
 		$hours = intdiv($minutes, 60);
-		$formattedHours = $hours < 10 ? "0{$hours}" : $hours;
-		$hoursLabel = $hours > 1 ? 'hrs' : 'hr';
-		$remainingMinutes = $minutes % 60;
-		$formattedMinutes = $remainingMinutes < 10 ? "0{$remainingMinutes}" : $remainingMinutes;
-		$minutesLabel = $remainingMinutes > 1 ? 'mins' : 'min';
+		$minutes = $minutes % 60;
 		
-		return "{$formattedHours} {$hoursLabel} : {$formattedMinutes} {$minutesLabel}";
+		return sprintf("%02d hrs : %02d mins", $hours, $minutes);
 	}
 }

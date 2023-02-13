@@ -33,7 +33,7 @@ class Reading_Pace_Indicator_Public {
 	 * @return void
 	 */
 	private function load_hooks() {
-		if(esc_attr(get_option('hide_reading_pace_indicator_option_name')) == 1) {
+		if(esc_attr(get_option('hide_reading_pace_indicator_option_name')) != 1) {
 			add_filter('the_content', [$this, 'prepend_read_duration'], 0);
 		}
 		add_action('wp_enqueue_scripts', [$this, 'enqueue_files']);
