@@ -86,6 +86,7 @@ class Reading_Pace_Indicator_Admin {
 		register_setting($this->plugin_name, 'hide_reading_pace_indicator_option_name');
 		register_setting($this->plugin_name, 'youtube_api_key_option_name');
 		register_setting($this->plugin_name, 'text_color_option_name');
+		register_setting($this->plugin_name, 'exclude_video_play_duration_option_name');
 
 		add_settings_field(
 			'words_per_minute_id',
@@ -94,7 +95,8 @@ class Reading_Pace_Indicator_Admin {
 			'reading_pace_indicator',
 			'reading_pace_indicator_section',
 			array( 
-				'id' => 'words_per_minute_id', 
+				'id' => 'words_per_minute_id',
+				'label_for' => 'words_per_minute_id',
 				'option_name' => 'words_per_minute_option_name'
 			)
 		);
@@ -106,8 +108,22 @@ class Reading_Pace_Indicator_Admin {
 			'reading_pace_indicator',
 			'reading_pace_indicator_section',
 			array( 
-				'id' => 'hide_reading_pace_indicator_id', 
+				'id' => 'hide_reading_pace_indicator_id',
+				'label_for' => 'hide_reading_pace_indicator_id',
 				'option_name' => 'hide_reading_pace_indicator_option_name'
+			)
+		);
+		
+		add_settings_field(
+			'exclude_video_play_duration_field',
+			__('Exclude Video Play Duration', 'reading-pace-indicator'), 
+			array($this, 'exclude_video_play_duration_callback_function'),
+			'reading_pace_indicator',
+			'reading_pace_indicator_section',
+			array( 
+				'id' => 'exclude_video_play_duration_id',
+				'label_for' => 'exclude_video_play_duration_id',
+				'option_name' => 'exclude_video_play_duration_option_name'
 			)
 		);
 
@@ -118,7 +134,8 @@ class Reading_Pace_Indicator_Admin {
 			'reading_pace_indicator',
 			'reading_pace_indicator_section',
 			array( 
-				'id' => 'youtube_api_key_id', 
+				'id' => 'youtube_api_key_id',
+				'label_for' => 'youtube_api_key_id',
 				'option_name' => 'youtube_api_key_option_name'
 			)
 		);
@@ -131,7 +148,9 @@ class Reading_Pace_Indicator_Admin {
 			'reading_pace_indicator_styling_section',
 			array( 
 				'id' => 'text_color_id', 
-				'option_name' => 'text_color_option_name'
+				'label_for' => 'text_color_id',
+				'option_name' => 'text_color_option_name',
+				'description'  => __( 'API key for the YouTube Data API v3. This key is required in order to determine YouTube video play duration', 'reading-pace-indicator' ),
 			)
 		);
 	}
@@ -163,6 +182,14 @@ class Reading_Pace_Indicator_Admin {
 		echo "<input type='checkbox' name='$option_name' id='$id' " . ( $option_value == 1 ? 'checked' : '' ) . " value='1' />";
 	}
 	
+	function exclude_video_play_duration_callback_function( $value ) {
+		$id = esc_attr( $value['id'] );
+		$option_name = esc_attr( $value['option_name'] );
+		$option_value = esc_attr( get_option( $option_name ) );
+		
+		echo "<input type='checkbox' name='$option_name' id='$id' " . ( $option_value == 1 ? 'checked' : '' ) . " value='1' />";
+	}
+	
 	function youtube_api_key_callback_function( $value ) {
 		$id = esc_attr( $value['id'] );
 		$option_name = esc_attr( $value['option_name'] );
@@ -179,6 +206,7 @@ class Reading_Pace_Indicator_Admin {
 		?>
 		
 		<input type='color' name='<?php echo $option_name; ?>' id='<?php echo $id; ?>' value="<?php echo $option_value; ?>" />
+		<p class="description"><?php echo esc_html( $value['description'] ); ?></p>
 	<?php }
 
 	/**

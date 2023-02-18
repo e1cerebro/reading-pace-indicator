@@ -8,10 +8,10 @@ class Utils {
 	 * @return string The estimated read duration in minutes or hours, rounded up.
 	 */
 	public function generateReadDuration(string $content): string {
-		if (empty($content)) {
-			return "0 mins";
-		}
-		$video_minutes = $this->getVideoUrlFromContent($content);
+		if (empty($content)) return "0 mins";
+		
+		$video_minutes = esc_attr(get_option('exclude_video_play_duration_option_name')) != 1 ? $this->getVideoUrlFromContent($content) : 0;
+
 		$wordCount = $this->countWords($content);
 		$average_reading_speed = esc_attr(get_option('words_per_minute_option_name', AVERAGE_READING_SPEED));
 		$readTimeInMinutes = ceil($wordCount / $average_reading_speed);
