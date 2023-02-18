@@ -24,6 +24,10 @@ This plugin shows the estimated time it will take to read a blog content
 ### How do I configure the plugin?
 When you login into the Wordpress admin page, click on the Reading Pace menu and you can configure the plugin from the settings options
 
+### Short Codes
+If you want to insert this into a different location, you can use the following shortcode and provide the post ID you intended to display its reading pace.
+- [show_read_pace_indicator post=1241]
+
 ### Is this plugin compatible with my Wordpress version?
 This plugin have been tested on Wordpress 6.1.1
 

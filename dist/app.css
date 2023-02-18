@@ -6,16 +6,11 @@
 }
 
 .rd-read-duration-wrapper .the-timer-content {
-  color: #fff;
+  color: var(--textColor);
   width: -moz-fit-content;
   width: fit-content;
-  background-color: #000;
   border-radius: .25rem;
-  padding: .85rem 2rem;
-}
-
-.rd-read-duration-wrapper .the-timer-content .icon {
-  color: #ff8b34eb;
+  padding: .85rem 0;
 }
 
 /*# sourceMappingURL=app.css.map */

@@ -22,15 +22,9 @@
 		* Set the padding to 0.85rem on top and bottom and 2rem on the left and right.
 		* Set the width of the element to fit its content.
 		*/
-		color: $white;
-		background-color: $black;
+		color: var(--textColor);
 		border-radius: 0.25rem;
-		padding: 0.85rem 2rem;
+		padding: 0.85rem 0;
 		width: fit-content;
-
-		.icon {
-			// Set the color of the icon to $icon-color.
-			color: $icon-color;
-		}
 	}
 }

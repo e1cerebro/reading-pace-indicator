@@ -4,18 +4,29 @@ class Utils {
 	 * Generates the estimated read duration for a given string of content.
 	 *
 	 * @param string $content The content to calculate the read duration for.
+	 * @param string $format The content to calculate the read duration for.
 	 *
 	 * @return string The estimated read duration in minutes or hours, rounded up.
 	 */
-	public function generateReadDuration(string $content): string {
-		if (empty($content)) {
-			return "0 minutes";
-		}
+	public function generateReadDuration(string $content, string $format = ReturnFormat::HTML): string {
+		if (empty($content)) return "0 mins";
 		
+		$video_minutes = esc_attr(get_option('exclude_video_play_duration_option_name')) != 1 ? $this->getVideoUrlFromContent($content) : 0;
+
 		$wordCount = $this->countWords($content);
 		$average_reading_speed = esc_attr(get_option('words_per_minute_option_name', AVERAGE_READING_SPEED));
 		$readTimeInMinutes = ceil($wordCount / $average_reading_speed);
-		return $this->convertMinsToHours($readTimeInMinutes);
+		$durationInMinutes = $readTimeInMinutes + $video_minutes;
+		$duration = $this->convertMinsToHours($durationInMinutes);
+
+		if($format === ReturnFormat::HTML) {
+			$duration = "<div class='rd-read-duration-wrapper'>
+					<div class='the-timer-content'>
+						{$duration} <span>read time</span>
+					</div>
+				</div>";
+		}
+		return $duration;
 	}
 
 	/**
@@ -39,6 +50,67 @@ class Utils {
 		$wordCount = count($cleanedWordsArray);
 		
 		return $wordCount;
+	}
+
+	public function getVideoUrlFromContent($htmlContent) {
+		$totalMinutes = 0;
+
+		if(empty($htmlContent)) return $totalMinutes;
+		
+		$youtubeRegex = '/youtube\.com\/embed\/([^\"]+)/';
+
+		// Check if the content contains a YouTube video
+		if (preg_match_all($youtubeRegex, $htmlContent, $matches) && count($matches[1]) > 0) {
+			foreach ($matches[1] as $youtubeVideoId) {
+				$videoDuration = $this->get_youtube_video_duration($youtubeVideoId);
+				if($videoDuration) {
+					$totalMinutes += $this->convert_ISO_time_to_minutes($videoDuration);
+				}
+			}
+		}
+
+		return $totalMinutes;
+	}
+
+	/**
+	 * Get YouTube video duration.
+	 *
+	 * @param string $video_id YouTube video ID.
+	 * @return string|false Video duration or false on failure.
+	 */
+	public function get_youtube_video_duration( $video_id ) {
+		if ( empty( $video_id ) ) {
+			return false;
+		}
+
+		$api_key = esc_attr(get_option('youtube_api_key_option_name'));
+		$url     = "https://www.googleapis.com/youtube/v3/videos?id={$video_id}&part=contentDetails&key={$api_key}";
+
+		$response = API_Utils::curl_request( $url );
+
+		if ( empty( $response['items'][0]['contentDetails']['duration'] ) ) {
+			return false;
+		}
+
+		return $response['items'][0]['contentDetails']['duration'];
+	}
+
+	/**
+	 * Convert ISO time format to minutes.
+	 *
+	 * @param string $iso_time_format The ISO time format.
+	 * @return int|false Total number of minutes or false on failure.
+	 */
+	function convert_ISO_time_to_minutes( $iso_time_format ) {
+		try {
+			$interval = new DateInterval( $iso_time_format );
+			$total_seconds = $interval->s + $interval->i * 60 + $interval->h * 3600;
+			$total_minutes = round( $total_seconds / 60 );
+			return $total_minutes;
+		} catch ( Exception $e ) {
+			// Handle the error here, e.g. log the error and return a default value.
+			return false;
+		}
 	}
 
 	/**

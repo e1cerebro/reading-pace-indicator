@@ -64,6 +64,13 @@ class Reading_Pace_Indicator_Admin {
 			array($this, 'rad_section_render'),
 			'reading_pace_indicator',
 		);
+
+		add_settings_section(
+			'reading_pace_indicator_styling_section',
+			__('Styling Settings', 'reading-pace-indicator'),
+			array($this, 'rad_section_render'),
+			'reading_pace_indicator',
+		);
 	}
 
 	public function rad_section_render() {
@@ -75,8 +82,11 @@ class Reading_Pace_Indicator_Admin {
 	 *
 	 */
 	public function rad_register_settings() {
-		register_setting('reading_pace_indicator_option_group', 'words_per_minute_option_name');
-		register_setting('reading_pace_indicator_option_group', 'hide_reading_pace_indicator_option_name');
+		register_setting($this->plugin_name, 'words_per_minute_option_name');
+		register_setting($this->plugin_name, 'hide_reading_pace_indicator_option_name');
+		register_setting($this->plugin_name, 'youtube_api_key_option_name');
+		register_setting($this->plugin_name, 'text_color_option_name');
+		register_setting($this->plugin_name, 'exclude_video_play_duration_option_name');
 
 		add_settings_field(
 			'words_per_minute_id',
@@ -85,7 +95,8 @@ class Reading_Pace_Indicator_Admin {
 			'reading_pace_indicator',
 			'reading_pace_indicator_section',
 			array( 
-				'id' => 'words_per_minute_id', 
+				'id' => 'words_per_minute_id',
+				'label_for' => 'words_per_minute_id',
 				'option_name' => 'words_per_minute_option_name'
 			)
 		);
@@ -97,8 +108,49 @@ class Reading_Pace_Indicator_Admin {
 			'reading_pace_indicator',
 			'reading_pace_indicator_section',
 			array( 
-				'id' => 'hide_reading_pace_indicator_id', 
+				'id' => 'hide_reading_pace_indicator_id',
+				'label_for' => 'hide_reading_pace_indicator_id',
 				'option_name' => 'hide_reading_pace_indicator_option_name'
+			)
+		);
+		
+		add_settings_field(
+			'exclude_video_play_duration_field',
+			__('Exclude Video Play Duration', 'reading-pace-indicator'), 
+			array($this, 'exclude_video_play_duration_callback_function'),
+			'reading_pace_indicator',
+			'reading_pace_indicator_section',
+			array( 
+				'id' => 'exclude_video_play_duration_id',
+				'label_for' => 'exclude_video_play_duration_id',
+				'option_name' => 'exclude_video_play_duration_option_name'
+			)
+		);
+
+		add_settings_field(
+			'youtube_api_key_field',
+			__('YouTube API Key', 'reading-pace-indicator'), 
+			array($this, 'youtube_api_key_callback_function'),
+			'reading_pace_indicator',
+			'reading_pace_indicator_section',
+			array( 
+				'id' => 'youtube_api_key_id',
+				'label_for' => 'youtube_api_key_id',
+				'option_name' => 'youtube_api_key_option_name'
+			)
+		);
+		
+		add_settings_field(
+			'text_color_field',
+			__('Text Color', 'reading-pace-indicator'), 
+			array($this, 'text_color_callback_function'),
+			'reading_pace_indicator',
+			'reading_pace_indicator_styling_section',
+			array( 
+				'id' => 'text_color_id', 
+				'label_for' => 'text_color_id',
+				'option_name' => 'text_color_option_name',
+				'description'  => __( 'API key for the YouTube Data API v3. This key is required in order to determine YouTube video play duration', 'reading-pace-indicator' ),
 			)
 		);
 	}
@@ -129,6 +181,33 @@ class Reading_Pace_Indicator_Admin {
 		
 		echo "<input type='checkbox' name='$option_name' id='$id' " . ( $option_value == 1 ? 'checked' : '' ) . " value='1' />";
 	}
+	
+	function exclude_video_play_duration_callback_function( $value ) {
+		$id = esc_attr( $value['id'] );
+		$option_name = esc_attr( $value['option_name'] );
+		$option_value = esc_attr( get_option( $option_name ) );
+		
+		echo "<input type='checkbox' name='$option_name' id='$id' " . ( $option_value == 1 ? 'checked' : '' ) . " value='1' />";
+	}
+	
+	function youtube_api_key_callback_function( $value ) {
+		$id = esc_attr( $value['id'] );
+		$option_name = esc_attr( $value['option_name'] );
+		$option_value = esc_attr( get_option( $option_name ) );
+		?>
+		
+		<input type='text' name='<?php echo $option_name; ?>' id='<?php echo $id; ?>' value="<?php echo $option_value; ?>" />
+	<?php }
+
+	function text_color_callback_function( $value ) {
+		$id = esc_attr( $value['id'] );
+		$option_name = esc_attr( $value['option_name'] );
+		$option_value = esc_attr( get_option( $option_name ) );
+		?>
+		
+		<input type='color' name='<?php echo $option_name; ?>' id='<?php echo $id; ?>' value="<?php echo $option_value; ?>" />
+		<p class="description"><?php echo esc_html( $value['description'] ); ?></p>
+	<?php }
 
 	/**
 	 * Render the admin page for the Reading Pace Indicator plugin.
@@ -146,7 +225,7 @@ class Reading_Pace_Indicator_Admin {
 			<form method='post' action='options.php'>
 				<?php
 					settings_errors();
-					settings_fields( 'reading_pace_indicator_option_group' );
+					settings_fields( $this->plugin_name );
 					do_settings_sections( 'reading_pace_indicator' );
 					submit_button();
 				?>
