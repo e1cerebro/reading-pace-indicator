@@ -89,12 +89,7 @@ class Reading_Pace_Indicator_Public {
 		if (is_single()) {
 			$util = new Utils();
 			$duration = $util->generateReadDuration($content);
-			$html = "<div class='rd-read-duration-wrapper'>
-				<div class='the-timer-content'>
-					{$duration} read time
-				</div>
-			</div>";
-			return $html . $content;
+			return $duration . $content;
 		}
 		return $content;
 	}

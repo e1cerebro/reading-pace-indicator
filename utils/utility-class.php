@@ -4,10 +4,11 @@ class Utils {
 	 * Generates the estimated read duration for a given string of content.
 	 *
 	 * @param string $content The content to calculate the read duration for.
+	 * @param string $format The content to calculate the read duration for.
 	 *
 	 * @return string The estimated read duration in minutes or hours, rounded up.
 	 */
-	public function generateReadDuration(string $content): string {
+	public function generateReadDuration(string $content, string $format = ReturnFormat::HTML): string {
 		if (empty($content)) return "0 mins";
 		
 		$video_minutes = esc_attr(get_option('exclude_video_play_duration_option_name')) != 1 ? $this->getVideoUrlFromContent($content) : 0;
@@ -16,7 +17,16 @@ class Utils {
 		$average_reading_speed = esc_attr(get_option('words_per_minute_option_name', AVERAGE_READING_SPEED));
 		$readTimeInMinutes = ceil($wordCount / $average_reading_speed);
 		$durationInMinutes = $readTimeInMinutes + $video_minutes;
-		return $this->convertMinsToHours($durationInMinutes);
+		$duration = $this->convertMinsToHours($durationInMinutes);
+
+		if($format === ReturnFormat::HTML) {
+			$duration = "<div class='rd-read-duration-wrapper'>
+					<div class='the-timer-content'>
+						{$duration} <span>read time</span>
+					</div>
+				</div>";
+		}
+		return $duration;
 	}
 
 	/**

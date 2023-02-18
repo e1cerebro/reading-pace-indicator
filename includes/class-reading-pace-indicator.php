@@ -48,6 +48,7 @@ class Reading_Pace_Indicator {
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'utils/constants.php' );
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'utils/utility-class.php' );
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-reading-pace-indicator-public.php' );
+		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-reading-pace-indicator-short-codes.php' );
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-reading-pace-indicator-admin.php' );
 	}
 
@@ -69,5 +70,6 @@ class Reading_Pace_Indicator {
 	private function run() {
 		new Reading_Pace_Indicator_Public( $this->plugin_name, $this->plugin_version );
 		new Reading_Pace_Indicator_Admin( $this->plugin_name, $this->plugin_version );
+		new Reading_Pace_Indicator_Short_Codes( $this->plugin_name, $this->plugin_version );
 	}
 }
