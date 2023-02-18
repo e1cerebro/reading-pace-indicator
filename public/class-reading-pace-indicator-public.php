@@ -34,9 +34,10 @@ class Reading_Pace_Indicator_Public {
 	 */
 	private function load_hooks() {
 		if(esc_attr(get_option('hide_reading_pace_indicator_option_name')) != 1) {
-			add_filter('the_content', [$this, 'prepend_read_duration'], 0);
+			add_filter('the_content', array( $this, 'prepend_read_duration' ), 0);
 		}
-		add_action('wp_enqueue_scripts', [$this, 'enqueue_files']);
+		add_action('wp_enqueue_scripts', array( $this, 'enqueue_files' ));
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_custom_theme_colors' ));
 	}
 
 	/**
@@ -62,6 +63,20 @@ class Reading_Pace_Indicator_Public {
 		);
 	}
 
+	public function add_custom_theme_colors() {
+		$text_color = esc_attr(get_option('text_color_option_name', '#000'));
+
+		$css = <<<CSS
+		:root {
+			--textColor: {$text_color};
+		}
+		CSS;
+
+		wp_register_style( 'dma-inline-style', false );
+		wp_enqueue_style( 'dma-inline-style' );
+		wp_add_inline_style( 'dma-inline-style', $css );
+	}
+
 	/**
 	 * This function prepends the read duration of a single post to the post's content.
 	 * The read duration is calculated using the `generateReadDuration` method from the `Utils` class.
@@ -76,7 +91,7 @@ class Reading_Pace_Indicator_Public {
 			$duration = $util->generateReadDuration($content);
 			$html = "<div class='rd-read-duration-wrapper'>
 				<div class='the-timer-content'>
-					<i class='icon far fa-clock'></i> {$duration}
+					{$duration} read time
 				</div>
 			</div>";
 			return $html . $content;

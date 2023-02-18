@@ -43,6 +43,8 @@ class Reading_Pace_Indicator {
 	 * @access private
 	 */
 	private function load_required_files() {
+		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'init-env.php' );
+		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'utils/apis.php' );
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'utils/constants.php' );
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'utils/utility-class.php' );
 		include_once( plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-reading-pace-indicator-public.php' );
