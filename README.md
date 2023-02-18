@@ -26,7 +26,7 @@ When you login into the Wordpress admin page, click on the Reading Pace menu and
 
 ### Short Codes
 If you want to insert this into a different location, you can use the following shortcode and provide the post ID you intended to display its reading pace.
-**[show_read_pace_indicator post=1241]**
+- [show_read_pace_indicator post=1241]
 
 ### Is this plugin compatible with my Wordpress version?
 This plugin have been tested on Wordpress 6.1.1
